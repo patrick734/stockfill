@@ -1,0 +1,5 @@
+{
+  "harvest": { "intervalSeconds": 0 },
+  "drawdown": { "defaultRoute": "default" },
+  "borrowDesk": { "claimIntervalSeconds": 0, "logUnhealthy": true, "scanFromBlock": 0 }
+}

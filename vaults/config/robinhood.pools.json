@@ -1,0 +1,218 @@
+{
+  "AAPL": {
+    "oracleUsd": 333.82386412,
+    "updatedAt": "2026-10-02T16:39:40.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0xc748f4671a867db48b552f6b7650bf3255e05f80f00e3f7aad1b17ccb7898fdb",
+      "spotUsdg": 334.02,
+      "offBps": 6,
+      "liquidity": "656056797691764284"
+    }
+  },
+  "AMD": {
+    "oracleUsd": 632.82895,
+    "updatedAt": "2026-10-02T18:51:35.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0xde9f85fdd9e05a943a52f2c69ffafe3064a3287df03d02c9b431bc92d4781274",
+      "spotUsdg": 635.4442,
+      "offBps": 41,
+      "liquidity": "237436636019165795"
+    }
+  },
+  "AMZN": {
+    "oracleUsd": 251.64999999,
+    "updatedAt": "2026-10-02T19:51:17.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0xd32646872e6712af8cf778e34b6bbef1d2ae0bddd83764e1b07333518ad59333",
+      "spotUsdg": 251.7191,
+      "offBps": 3,
+      "liquidity": "6243385292437571"
+    }
+  },
+  "CRCL": {
+    "oracleUsd": 81.68315,
+    "updatedAt": "2026-10-02T20:17:50.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0x60a78f9462af550fbf603774b1eeb4a6b880cd2a475862a07b22d035f22310b7",
+      "spotUsdg": 3.402567865403252e+50,
+      "offBps": 4.165568866287909e+52,
+      "liquidity": "0"
+    }
+  },
+  "GME": {
+    "oracleUsd": 25.19345,
+    "updatedAt": "2026-10-02T21:55:01.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0x3d436b4fdc532c61a0bf15d6cae80a66eb8f28ee9daec34dbec4b5bc9964063b",
+      "spotUsdg": 25.0293,
+      "offBps": -65,
+      "liquidity": "1224688917933886"
+    }
+  },
+  "GOOGL": {
+    "oracleUsd": 343.66163145,
+    "updatedAt": "2026-10-02T16:06:58.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0xd4ecb79fdc521d7725d22b33ed43cb4e47aa96bfad76aa29577e3151f723ac5e",
+      "spotUsdg": 343.5202,
+      "offBps": -4,
+      "liquidity": "596134691278846981"
+    }
+  },
+  "INTC": {
+    "oracleUsd": 119.301,
+    "updatedAt": "2026-10-02T19:55:32.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0xf2e329e631d0fb315a5c563ee3a9120f24822b5ef6c502a91cb56b174d5d8c22",
+      "spotUsdg": 117.9649,
+      "offBps": -112,
+      "liquidity": "406560839384779161"
+    }
+  },
+  "META": {
+    "oracleUsd": 730.13257355,
+    "updatedAt": "2026-10-02T15:24:56.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0x5875d407a42965b0e768c8925cea290e06fa50603ef34fc99eb92a1050e6ae36",
+      "spotUsdg": 728.8357,
+      "offBps": -18,
+      "liquidity": "2794010125634351438"
+    }
+  },
+  "MSFT": {
+    "oracleUsd": 517.51076919,
+    "updatedAt": "2026-10-02T19:57:25.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0x9194a557b6a6bb2236b49ea7e2bbccec5d3eeb705aef00903be4b3de1d949579",
+      "spotUsdg": 517.0789,
+      "offBps": -8,
+      "liquidity": "245623417866783181"
+    }
+  },
+  "MSTR": {
+    "oracleUsd": 160.665,
+    "updatedAt": "2026-10-02T20:07:21.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0x72f7109f6d7e54e984f99c9f8d76f6b35617fc4f977ff311c9eaa5a2a524030f",
+      "spotUsdg": 3.402567865403252e+50,
+      "offBps": 2.117802797997854e+52,
+      "liquidity": "0"
+    }
+  },
+  "MU": {
+    "oracleUsd": 1071.82519141,
+    "updatedAt": "2026-10-02T21:10:41.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0x6fa3ee0048e78bf0a513eb0ab56f482944a767c21db990fcf555605e69f05659",
+      "spotUsdg": 1075.775,
+      "offBps": 37,
+      "liquidity": "89792622481900334"
+    }
+  },
+  "NVDA": {
+    "oracleUsd": 234.99711907,
+    "updatedAt": "2026-10-02T17:07:32.000Z",
+    "pool": {
+      "fee": 100,
+      "tickSpacing": 1,
+      "poolId": "0x6444a8e0b267406a15db74ca00c4a24bdfa81ed3180f5b6d0851f8ed6f4f29c5",
+      "spotUsdg": 235.0084,
+      "offBps": 0,
+      "liquidity": "90756512989063721098"
+    }
+  },
+  "PLTR": {
+    "oracleUsd": 188.546,
+    "updatedAt": "2026-10-02T19:50:57.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0xee430ee1003e1985e1828a01b9a20dad67ad4302994fe2abb4a173de4ac54623",
+      "spotUsdg": 190.2375,
+      "offBps": 90,
+      "liquidity": "840752100400847169"
+    }
+  },
+  "QQQ": {
+    "oracleUsd": 751.99912534,
+    "updatedAt": "2026-10-02T12:57:12.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0xf9568ec0cba6e9ba30d9daabbf3e807813b8852e5737b7d83ea06529c73c9758",
+      "spotUsdg": 749.5885,
+      "offBps": -32,
+      "liquidity": "225406173518911"
+    }
+  },
+  "SNDK": {
+    "oracleUsd": 1718.19855,
+    "updatedAt": "2026-10-02T16:51:21.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0x2707cb88a6a40fa0f948f58958051ba097d6f6a3cf7f87929bd68ccc5becea24",
+      "spotUsdg": 1727.5788,
+      "offBps": 55,
+      "liquidity": "41715064378235056"
+    }
+  },
+  "SPCX": {
+    "oracleUsd": 158.725,
+    "updatedAt": "2026-10-02T20:11:31.000Z",
+    "pool": {
+      "fee": 10000,
+      "tickSpacing": 200,
+      "poolId": "0xcb6ffbcc84359535c2cc0a5688c0a76520ea6e0a4820fddd3ac8d7880e576370",
+      "spotUsdg": 158.4565,
+      "offBps": -17,
+      "liquidity": "391809645832109982"
+    }
+  },
+  "SPY": {
+    "oracleUsd": 770.71210575,
+    "updatedAt": "2026-10-02T12:30:38.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0xfe2a80bb5618fd14984b92ca6d45bf5ba67443ddb1435e28b2e48df2fc1526cd",
+      "spotUsdg": 771.292,
+      "offBps": 8,
+      "liquidity": "6933102545694564919"
+    }
+  },
+  "TSLA": {
+    "oracleUsd": 370.448,
+    "updatedAt": "2026-10-02T19:55:31.000Z",
+    "pool": {
+      "fee": 3000,
+      "tickSpacing": 60,
+      "poolId": "0x8517f8071ae5b831b738052f12125e8e3d6c158b78728aa44ce3b25e5104d32e",
+      "spotUsdg": 371.8098,
+      "offBps": 37,
+      "liquidity": "756337354122253205"
+    }
+  }
+}

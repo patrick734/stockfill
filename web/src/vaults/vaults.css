@@ -1,0 +1,253 @@
+/* Vaults, Borrow and Portfolio in the Stockfill look: paper and ink, one blue accent, serif figures, mono numbers.
+   Everything is scoped under .vx and built only from the site's variables in globals.css, so light and dark
+   mode follow prefers-color-scheme with the rest of the site. Shared site classes (.section-head, .label, h1/h2,
+   .lede, .pill, .steps, .markets, .btn, .trade-pill, .tk-dot) are reused as-is. */
+
+/* ---------------------------------------------------------------- page head */
+.vx .vx-hero { padding-top: clamp(28px, 5vw, 64px); }
+.vx .vx-hero .lede { max-width: 640px; }
+.vx .vx-hero .pills .pill .tk-dot { width: 20px; height: 20px; font-size: 8px; margin-left: -8px; }
+.vx .vx-hero-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.vx .vx-hero-row h1 { margin-right: 4px; }
+.vx .vx-back { display: inline-block; margin-bottom: 16px; font-size: 13px; color: var(--muted); text-decoration: none; font-family: var(--f-mono); }
+.vx .vx-back:hover { color: var(--ink); }
+.vx .vx-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); vertical-align: middle; }
+.vx .section.vx-tight { padding-top: clamp(28px, 4vw, 44px); }
+.vx .section-head h2 em { white-space: nowrap; }
+.vx .vx-mt { margin-top: 22px; }
+.vx a { text-underline-offset: 3px; }
+
+/* ---------------------------------------------------------------- figures strip */
+.vx .vx-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 34px;
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.vx .vx-stats.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; }
+.vx .vx-stat { padding: 18px 22px 16px; border-right: 1px solid var(--rule); min-width: 0; }
+.vx .vx-stat:last-child { border-right: none; }
+.vx .vx-stat-v {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vx .vx-stat-l { margin-top: 8px; font-size: 12px; color: var(--ink-2); }
+.vx .vx-stat-h { margin-top: 2px; font-size: 12px; color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+/* a strip inside a card sits flat on it */
+.vx .vx-card .vx-stats { margin-top: 18px; background: transparent; border: none; border-top: 1px solid var(--rule); border-radius: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.vx .vx-card .vx-stat { padding-left: 0; padding-right: 18px; margin-right: 18px; }
+.vx .vx-card .vx-stat:last-child { margin-right: 0; }
+@media (max-width: 820px) {
+  .vx .vx-stats, .vx .vx-stats.c3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vx .vx-stat:nth-child(2n) { border-right: none; }
+  .vx .vx-stat:nth-child(-n + 2) { border-bottom: 1px solid var(--rule); }
+  .vx .vx-stats.c3 .vx-stat:nth-child(3) { grid-column: 1 / -1; }
+  .vx .vx-stat { padding: 14px 16px; }
+  .vx .vx-card .vx-stat { margin-right: 0; padding-left: 0; }
+  .vx .vx-card .vx-stat:nth-child(2n) { padding-left: 16px; }
+}
+
+/* ---------------------------------------------------------------- cards and panels */
+.vx .vx-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 22px;
+  min-width: 0;
+}
+.vx .vx-card h3, .vx .vx-token h3, .vx .vx-panel-head b { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 0; letter-spacing: -0.01em; }
+.vx .vx-card > p { margin: 10px 0 0; }
+.vx .vx-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+.vx .vx-title { display: flex; gap: 14px; align-items: flex-start; min-width: 0; }
+.vx .vx-title .tk-dot { width: 36px; height: 36px; margin-top: 2px; }
+.vx .vx-title p { margin: 6px 0 0; }
+.vx .vx-soon-card { border-style: dashed; border-color: var(--rule-2); display: grid; gap: 10px; justify-items: start; }
+.vx .vx-soon-card h3 { margin-top: 4px; }
+.vx .vx-soon-card p { margin: 0; color: var(--ink-2); max-width: 620px; }
+.vx .vx-foot { margin: 14px 0 0; }
+.vx .vx-links { display: flex; gap: 18px; flex-wrap: wrap; margin: 16px 0 0; }
+.vx .vx-links a, .vx .vx-card p a { color: var(--ink); }
+.vx .vx-links a:hover, .vx .vx-card p a:hover { color: var(--accent); }
+.vx .vx-stack { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.vx .vx-lines { gap: clamp(36px, 5vw, 56px); }
+.vx .vx-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 960px) {
+  .vx .vx-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* the action panel: same build as the swap card */
+.vx .vx-panel {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+}
+.vx .vx-panel-head { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 4px 2px; }
+.vx .vx-panel-head b { font-size: 24px; }
+.vx .vx-blurb { margin: 0; padding: 0 4px; min-height: 2.9em; }
+.vx .vx-tabs { display: flex; flex-wrap: wrap; padding: 3px; border-radius: 999px; background: var(--paper-2); gap: 2px; }
+.vx .vx-tabs button { flex: 1 1 auto; border: none; background: transparent; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.vx .vx-tabs button:hover { color: var(--ink); }
+.vx .vx-tabs button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+@media (max-width: 480px) {
+  .vx .vx-tabs { border-radius: 14px; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .vx .vx-tabs button { border-radius: 11px; padding: 7px 6px; }
+}
+
+.vx .vx-field { background: var(--paper-2); border-radius: 14px; padding: 12px 14px 14px; border: 1px solid transparent; transition: border-color 0.15s; }
+.vx .vx-field:focus-within { border-color: var(--rule-2); background: var(--card); }
+.vx .vx-field-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 20px; flex-wrap: wrap; }
+.vx .vx-bal { background: none; border: none; padding: 0; color: var(--muted); cursor: pointer; font-family: var(--f-mono); font-size: 12px; }
+.vx .vx-bal:hover { color: var(--accent); }
+.vx .vx-field-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+.vx .vx-field-row input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--f-mono);
+  font-size: clamp(26px, 4vw, 34px);
+  letter-spacing: -0.03em;
+  padding: 0;
+  outline: none;
+  color: var(--ink);
+}
+.vx .vx-field-row input::placeholder { color: var(--faint); }
+.vx .vx-sym { flex: none; border: 1px solid var(--rule-2); background: var(--card); border-radius: 999px; padding: 6px 12px; font-weight: 600; font-size: 14px; }
+
+.vx .vx-cta {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+.vx .vx-cta:hover:not(:disabled) { filter: brightness(1.08); }
+.vx .vx-cta:disabled { background: var(--paper-2); color: var(--muted); cursor: default; }
+.vx .vx-tx a { color: inherit; }
+.vx .vx-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.vx .vx-cta-row .btn { text-decoration: none; display: inline-block; }
+
+/* label and value rows, like the swap card's facts */
+.vx .vx-kvs { display: grid; margin-top: 12px; }
+.vx .vx-panel .vx-kvs { margin-top: 0; padding: 0 4px; }
+.vx .vx-kv { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+.vx .vx-kv:last-child { border-bottom: none; }
+.vx .vx-kv > span:first-child { color: var(--muted); }
+.vx .vx-kv > span:last-child { font-family: var(--f-mono); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.vx .vx-kv a { color: inherit; }
+.vx .vx-good { color: var(--up); }
+.vx .vx-danger { color: var(--err); }
+.vx .vx-warn { color: var(--warn); }
+.vx .vx-dim { color: var(--muted); }
+
+/* status pills */
+.vx .vx-pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: var(--paper-2); color: var(--muted); }
+.vx .vx-pill.ok { color: var(--accent); background: var(--accent-soft); }
+.vx .vx-pill.warn { color: var(--warn); background: var(--warn-soft); }
+.vx .vx-pill.bad { color: var(--err); background: color-mix(in srgb, var(--err) 12%, transparent); }
+.vx .vx-pill.burn { color: var(--paper); background: color-mix(in srgb, var(--paper) 14%, transparent); }
+
+/* ---------------------------------------------------------------- vault table */
+.vx .markets .asset .vx-row-link { text-decoration: none; color: inherit; }
+.vx .markets td.num .vx-capbar { margin-left: auto; }
+.vx .vx-capbar { height: 4px; width: min(120px, 100%); background: var(--paper-2); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+.vx .vx-capbar > div { height: 100%; background: var(--accent); border-radius: 999px; }
+.vx .markets td.vx-dim { font-size: 13px; color: var(--muted); }
+.vx .vx-next { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px 32px; flex-wrap: wrap; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+.vx .vx-next p { margin: 6px 0 0; max-width: 360px; }
+.vx .vx-chips { display: flex; flex-wrap: wrap; gap: 8px; max-width: 720px; justify-content: flex-end; }
+.vx .vx-chip { display: inline-flex; align-items: center; gap: 7px; padding: 4px 12px 4px 4px; border: 1px solid var(--rule-2); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); background: var(--card); }
+.vx .vx-chip .tk-dot { width: 22px; height: 22px; font-size: 8px; }
+.vx .vx-board-head { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; }
+@media (max-width: 820px) {
+  .vx .vx-chips { justify-content: flex-start; }
+}
+
+/* ---------------------------------------------------------------- fee split */
+.vx .vx-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.vx .vx-ring { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; padding: 22px; background: var(--glass); border: 1px solid var(--glass-edge); border-radius: var(--r); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.vx .vx-ring svg { width: 180px; height: 180px; flex: none; max-width: 100%; }
+.vx .vx-legend { display: grid; gap: 14px; }
+.vx .vx-legend > div { display: flex; gap: 12px; align-items: flex-start; }
+.vx .vx-legend i { width: 10px; height: 10px; border-radius: 3px; flex: none; margin-top: 10px; }
+.vx .vx-legend b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 32px; line-height: 1; }
+.vx .vx-legend span { color: var(--ink-2); font-size: 13.5px; }
+.vx .vx-burn, .vx .vx-token { background: var(--ink); color: var(--paper); border-radius: var(--r); padding: 26px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.vx .vx-burn .label, .vx .vx-token .label { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+.vx .vx-burn p, .vx .vx-token p { margin: 0; color: color-mix(in srgb, var(--paper) 78%, transparent); max-width: 480px; }
+.vx .vx-burn-big { font-family: var(--f-display); font-size: clamp(36px, 4.4vw, 54px); line-height: 1; letter-spacing: -0.01em; }
+.vx .vx-burn-btn, .vx .vx-token-btn {
+  justify-self: start;
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid var(--paper);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.vx .vx-burn-btn:hover, .vx .vx-token-btn:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.vx .vx-token-btn.ghost { background: transparent; color: var(--paper); border-color: color-mix(in srgb, var(--paper) 30%, transparent); }
+.vx .vx-token-btn:disabled { opacity: 0.5; cursor: default; }
+.vx .vx-token h3 { font-size: 54px; line-height: 1; }
+.vx .vx-token .vx-kv { border-bottom-color: color-mix(in srgb, var(--paper) 14%, transparent); }
+.vx .vx-token .vx-kv > span:first-child { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+.vx .vx-token .vx-kvs { margin-top: 4px; }
+.vx .vx-token .vx-cta-row { margin-top: 6px; }
+.vx .vx-token-note { font-size: 12px !important; color: color-mix(in srgb, var(--paper) 55%, transparent) !important; }
+.vx .vx-token .err { color: var(--err); }
+@media (max-width: 860px) {
+  .vx .vx-split { grid-template-columns: minmax(0, 1fr); }
+  .vx .vx-ring { justify-content: center; }
+}
+
+/* ---------------------------------------------------------------- vault detail */
+.vx .vx-range { margin-top: 16px; padding: 14px 14px 34px; background: var(--paper-2); border-radius: 12px; }
+.vx .vx-range-bar { position: relative; height: 36px; margin: 12px 8px 0; border-radius: 6px; background: var(--card); }
+.vx .vx-range-band { position: absolute; top: 0; bottom: 0; background: var(--accent-soft); border-left: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.vx .vx-range-mark { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ink); }
+.vx .vx-range-mark.out { background: var(--warn); }
+.vx .vx-range-tag { position: absolute; top: 100%; transform: translateX(-50%); font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-top: 6px; white-space: nowrap; }
+.vx .vx-range-tag.now { color: var(--ink); top: auto; bottom: 100%; margin: 0 0 6px; }
+.vx .vx-health { margin-top: 16px; }
+.vx .vx-health-track { position: relative; height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--err), var(--warn) 35%, var(--up) 65%); margin: 12px 8px 6px; }
+.vx .vx-health-dot { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 3px solid var(--card); transform: translate(-50%, -50%); }
+.vx .vx-health-dot.next { background: transparent; border: 2px dashed var(--ink); }
+
+/* ---------------------------------------------------------------- portfolio */
+.vx .vx-holding { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.vx .vx-holding:last-of-type { border-bottom: none; }
+.vx .vx-holding .tk-dot { width: 32px; height: 32px; }
+.vx .vx-holding > span:nth-child(2) { display: grid; min-width: 0; }
+.vx .vx-holding b { font-weight: 600; font-family: var(--f-mono); font-size: 14px; }
+.vx .vx-holding:hover b { color: var(--accent); }
+.vx .vx-holding-v { display: grid; text-align: right; font-family: var(--f-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.vx .vx-holding-v > span { font-size: 11.5px; }
+.vx .vx-card h3 + p, .vx .vx-card h3 + .vx-holding { margin-top: 10px; }
+.vx .vx-hero + .vx-soon-card, .vx .vx-hero + .vx-stats { margin-top: 28px; }

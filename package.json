@@ -1,0 +1,15 @@
+{
+  "name": "stockfill",
+  "private": true,
+  "workspaces": [
+    "engine",
+    "web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "test:contracts": "cd contracts && forge test --no-match-contract Fork",
+    "test:engine": "npm test -w engine",
+    "tokens": "npm run tokens -w engine"
+  }
+}

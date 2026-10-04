@@ -1,0 +1,24 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.26"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 1000000
+via_ir = true
+bytecode_hash = "none"
+fs_permissions = [{ access = "read", path = "./test/bin" }, { access = "write", path = "./local-world.json" }]
+remappings = [
+  "v4-core/=lib/v4-core/src/",
+  "v4-core-test/=lib/v4-core/test/",
+  "forge-std/=lib/forge-std/src/",
+  "solmate/=lib/v4-core/lib/solmate/",
+  "@openzeppelin/=lib/v4-core/lib/openzeppelin-contracts/",
+]
+
+[profile.default.fuzz]
+runs = 512
+
+[rpc_endpoints]
+robinhood = "${RPC_URL}"

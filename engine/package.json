@@ -1,0 +1,22 @@
+{
+  "name": "@stockfill/engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsx test/local.test.ts && tsx test/logs.test.ts && tsx test/probe.test.ts",
+    "typecheck": "tsc --noEmit",
+    "tokens": "tsx scripts/tokens.ts"
+  },
+  "dependencies": {
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts"
+}

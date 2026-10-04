@@ -1,0 +1,44 @@
+# Refreshes the Stock Token list from Robinhood's registry once a day (and on demand).
+# If anything changed, it commits web/public/data and Vercel redeploys the site on its own.
+# Needs one repo secret: RPC_URL (a Robinhood Chain RPC, e.g. an Alchemy URL).
+name: Refresh token list
+
+on:
+  schedule:
+    - cron: "17 13 * * *" # daily, 13:17 UTC (before US market open)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tokens
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Build token list
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
+          OUT_DIR: ../web/public/data
+        run: npm run tokens -w engine
+      - name: Commit if changed
+        run: |
+          # updatedAt changes every run; only commit when the tokens or pools themselves changed.
+          if git diff --quiet -I '"updatedAt"' -- web/public/data && [ -z "$(git ls-files --others --exclude-standard web/public/data)" ]; then
+            echo "No changes."; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/public/data
+          git commit -m "Refresh Stock Token list"
+          git push

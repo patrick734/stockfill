@@ -1,0 +1,44 @@
+{
+  "loopIntervalSeconds": 300,
+  "txConfirmations": 1,
+  "txTimeoutSeconds": 180,
+
+  "vaults": {
+    "only": []
+  },
+
+  "rebalance": {
+    "enabled": true,
+    "halfWidthTicks": 1200,
+    "edgeThresholdPct": 15,
+    "minSwapUsdg": "5",
+    "minIdleUsdg": "10",
+    "maxIdlePct": 25,
+    "routes": {}
+  },
+
+  "harvest": {
+    "enabled": true,
+    "intervalSeconds": 21600,
+    "minFeesUsdg": "0"
+  },
+
+  "feeRouter": {
+    "enabled": true
+  },
+
+  "drawdown": {
+    "enabled": true,
+    "slippageBps": 200,
+    "defaultRoute": ["IN", "USDG", "ETH", "FILL"],
+    "routes": {}
+  },
+
+  "borrowDesk": {
+    "claimReserves": true,
+    "claimIntervalSeconds": 86400,
+    "logUnhealthy": false,
+    "scanFromBlock": 0,
+    "scanChunkBlocks": 50000
+  }
+}
