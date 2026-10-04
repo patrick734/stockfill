@@ -11,14 +11,10 @@ export const BRAND = {
   domain: process.env.NEXT_PUBLIC_DOMAIN || "",
   x: process.env.NEXT_PUBLIC_X_URL || "",
   telegram: "",
-  /** The project token. Launched on Pons from the dev wallet; set-token.sh records it (and wins over the env var).
-   *  Until an address is set, the site says it has not launched. */
+  /** The project token, launched on Pons from the dev wallet. Its address comes only from the deployment
+   *  (set-token.sh), so no other address can ever show here. Until it is set, the site says it has not launched. */
   token: {
     symbol: process.env.NEXT_PUBLIC_TOKEN_SYMBOL || "FILL",
-    address: (/^0x[0-9a-fA-F]{40}$/.test(deployedFill)
-      ? deployedFill
-      : /^0x[0-9a-fA-F]{40}$/.test((process.env.NEXT_PUBLIC_TOKEN_ADDRESS ?? "").trim())
-        ? (process.env.NEXT_PUBLIC_TOKEN_ADDRESS ?? "").trim()
-        : "") as `0x${string}` | "",
+    address: (/^0x[0-9a-fA-F]{40}$/.test(deployedFill) ? deployedFill : "") as `0x${string}` | "",
   },
 };
