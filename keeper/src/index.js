@@ -8,6 +8,7 @@ const { logger } = require("./log");
 const { reason } = require("./chain");
 const { setupVaults, runVault } = require("./duties/vaults");
 const { runFeeRouter, runDrawdown, runBorrowDesks } = require("./duties/fees");
+const { runBasket } = require("./duties/basket");
 
 const log = logger("keeper");
 let stopping = false;
@@ -92,6 +93,12 @@ async function init() {
 async function cycle(ctx, n) {
   const started = Date.now();
   log.info(`cycle ${n} start`, { block: await ctx.provider.getBlockNumber().catch(() => "?") });
+  // The Basket first: USDG it puts into a Vault is placed by that Vault's rebalance in the same cycle.
+  try {
+    await runBasket(ctx);
+  } catch (e) {
+    logger("basket").error("unexpected failure", { reason: reason(e) });
+  }
   for (const w of ctx.vaults) {
     if (stopping) return;
     try {

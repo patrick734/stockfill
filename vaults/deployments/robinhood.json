@@ -2,59 +2,97 @@
   "network": "robinhood",
   "chainId": 4663,
   "roles": {
-    "admin": "0x2571903bA705F44951e365E1e191975b6f725e99",
-    "guardian": "0x2571903bA705F44951e365E1e191975b6f725e99",
-    "keeper": "0x20268C7D5b56f762E3F1c48dca214217231F1c25",
-    "treasury": "0x2571903bA705F44951e365E1e191975b6f725e99"
+    "admin": "0xb82813dB82844340005bBEDf2ABB808CE0fc27f1",
+    "guardian": "0xb82813dB82844340005bBEDf2ABB808CE0fc27f1",
+    "keeper": "0x19f4d7d52fd90b624Dea8702842aCa5fc71AAa16",
+    "treasury": "0xb82813dB82844340005bBEDf2ABB808CE0fc27f1"
   },
+  "block": 87170313,
+  "timelock": "0x8e1a6C2739C9303c51876692D86121588CCEC12A",
+  "usdg": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+  "fillToken": null,
+  "fillTokenSetter": "0xb82813dB82844340005bBEDf2ABB808CE0fc27f1",
+  "oracle": "0x3BAE3388b2a409efe7507C434876f53583571A62",
+  "swapAdapter": "0xC5A94Ab1eAf3B4eEa314D922E52C4009899D9Ac9",
+  "buyBurn": "0xc6E8F56697Ff63bCB0e94b591B2c79cB80B615D1",
+  "feeRouter": "0x6BA15Ce113C93B797c34240107D54e66e7857510",
+  "registry": "0x76B0C6c027dFB2FDdE19e94f4ec2cE308f3392BA",
   "vaults": {
-    "TSLA": {
-      "vault": "0x724c4eBC1107dd5aB0d17D423AFF1427A2e65C90",
-      "position": "0x2C108277DaDb0e5029FC2f19148e6906Da9e7A10",
-      "equityToken": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
-      "name": "Tesla"
-    },
     "NVDA": {
-      "vault": "0x5B7D4e38b3C5bF59fED03939ed2a8C06aC0e9edE",
-      "position": "0x05F5Bfd4b414b2673d36E23af5A3a81f38a092Fa",
+      "vault": "0x01365a93360256a20ceCBc9C803d55285b742D58",
+      "position": "0x1fb4e0d1C1d056E8923ef04adecC16c033cd0e46",
       "equityToken": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
       "name": "NVIDIA"
     },
+    "TSLA": {
+      "vault": "0x0C27Dc2253dD05136760C4ce23d1Bdb1F905CF14",
+      "position": "0x59f401Ba4CceA915BC8830c912875a179b95f1E0",
+      "equityToken": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
+      "name": "Tesla"
+    },
     "AAPL": {
-      "vault": "0x975e32d57e0B5e01b10d2464E6e49a990AdF7a07",
-      "position": "0x24053b2F7d761BFabbA1AF60eF6967f54CA1Fc36",
+      "vault": "0x527b043726e47AC3F5eCDbE188481777aAfFD206",
+      "position": "0x173AE9B5e890cf8e58F2A36455455A366751bc30",
       "equityToken": "0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9",
       "name": "Apple"
     },
-    "PLTR": {
-      "vault": "0xFD48E1434C9158b81cEeb04FeDd567852a64eC4A",
-      "position": "0x5d387C4ad74dEAfB8604500C3c5D357A587d53bE",
-      "equityToken": "0x894E1EC2D74FFE5AEF8Dc8A9e84686acCB964F2A",
-      "name": "Palantir"
-    },
     "META": {
-      "vault": "0x439225f985122ab11a5B645826eD308dd51A47a2",
-      "position": "0x841a21B792B2AA322a67454020Ef183D53AE76d3",
+      "vault": "0x9B00816148B824F371e48e8BE1303a4BD36E21dd",
+      "position": "0xafb3da05D38C72D5D882b0A3CdEfac78F928D4FC",
       "equityToken": "0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35",
       "name": "Meta"
+    },
+    "GOOGL": {
+      "vault": "0xC50FB33341f2891feB86a970dd655Da1590a9014",
+      "position": "0x9d1Dd105493675D8B7E163F04C610c3afD2bBc46",
+      "equityToken": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
+      "name": "Alphabet"
+    },
+    "SPY": {
+      "vault": "0xE6cA511db3050a90A3f49B9fd4941cDfF0bBffA3",
+      "position": "0x59E50102d8F35d00F15a8c0136F451261578966D",
+      "equityToken": "0x117cc2133c37B721F49dE2A7a74833232B3B4C0C",
+      "name": "SPDR S&P 500"
     }
   },
   "creditLines": {
-    "META": "0x1fd5d713426e016080632a9a75379729D8d92081"
+    "META": "0xE795BB4A61d6fEBd3580320dE6ec54ffd8F70A70",
+    "NVDA": "0xBe5157eAA42447250331B2EBF50A402532124b1C"
   },
-  "timelock": "0xf60f878b6d4C578F8d065e7729033f1E9239dd90",
-  "usdg": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
-  "fillToken": null,
-  "fillTokenSetter": "0x2571903bA705F44951e365E1e191975b6f725e99",
-  "oracle": "0xa78595EE794fD6EFD2a64C298c94d9A37da69A50",
-  "swapAdapter": "0xf268600389Ebd3b98425b75caC0272667726CFcA",
-  "buyBurn": "0x801d8E548a2C48A871C597586528036Ce237630a",
-  "feeRouter": "0x023d09B2F26FB1a156461Bfc474241B95590fEa9",
-  "registry": "0x5f1F6aaD87Ad34032b02298418C944d141E1F180",
-  "basketProgram": "0xbc333DaCCDd3D4be6b9D996eAd7A25D30a737c23",
+  "basketProgram": "0x6224A43966297D7b8B81F15A011c351b782e3d8b",
   "pendingTimelockAcceptances": [
-    "0xa78595EE794fD6EFD2a64C298c94d9A37da69A50",
-    "0x5f1F6aaD87Ad34032b02298418C944d141E1F180",
-    "0xf268600389Ebd3b98425b75caC0272667726CFcA"
+    "0xC5A94Ab1eAf3B4eEa314D922E52C4009899D9Ac9",
+    "0x3BAE3388b2a409efe7507C434876f53583571A62",
+    "0x76B0C6c027dFB2FDdE19e94f4ec2cE308f3392BA"
+  ],
+  "openCaps": [
+    {
+      "target": "0x01365a93360256a20ceCBc9C803d55285b742D58",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0x0C27Dc2253dD05136760C4ce23d1Bdb1F905CF14",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0x527b043726e47AC3F5eCDbE188481777aAfFD206",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0x9B00816148B824F371e48e8BE1303a4BD36E21dd",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0xC50FB33341f2891feB86a970dd655Da1590a9014",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0xE6cA511db3050a90A3f49B9fd4941cDfF0bBffA3",
+      "cap": "25000000000"
+    },
+    {
+      "target": "0x6224A43966297D7b8B81F15A011c351b782e3d8b",
+      "cap": "50000000000"
+    }
   ]
 }

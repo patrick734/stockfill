@@ -241,12 +241,12 @@ describe("BasketProgram (extra coverage)", function () {
 
       // TSLA is listed but not held: its staleness does not matter.
       await ctx.tsla.feed.set(FEED(250), 1, 1);
-      expect(await b.allPricesFresh()).to.equal(true);
+      expect(await b.pricesUsable()).to.equal(true);
       expect(await b.maxDeposit(ctx.alice)).to.be.gt(0);
 
       // AMD is held: staleness closes deposits and USDG exits.
       await ctx.amd.feed.set(FEED(150), 1, 1);
-      expect(await b.allPricesFresh()).to.equal(false);
+      expect(await b.pricesUsable()).to.equal(false);
       expect(await b.maxDeposit(ctx.alice)).to.equal(0);
       expect(await b.maxMint(ctx.alice)).to.equal(0);
       expect(await b.maxWithdraw(ctx.alice)).to.equal(0);

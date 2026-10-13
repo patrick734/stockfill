@@ -97,6 +97,7 @@ async function main() {
   if (usdgAge <= BigInt(config.chainlink.usdgMaxAge) && usdgAnswer > 0n) ok(`USDG/USD fresh (${usdgAge}s old)`);
   else fail(`USDG/USD stale or invalid (${usdgAge}s old)`);
 
+  let usable = 0;
   for (const ticker of config.launch.vaults) {
     const t = config.equityTokens[ticker];
     const p = pools[ticker];
@@ -105,18 +106,25 @@ async function main() {
     const age = now - updated;
     const fresh = age <= BigInt(config.chainlink.equityMaxAge) && answer > 0n;
     const pool = p && p.pool;
-    if (!pool || !pool.liquidity || BigInt(pool.liquidity) === 0n) {
-      fail(`${ticker}: no liquid hookless pool in config/robinhood.pools.json (run: node scripts/probe-pools.js)`);
+    if (!pool || !pool.liquidity || BigInt(pool.liquidity) < BigInt(config.launch.poolMinLiquidity)) {
+      warn(`${ticker}: no hookless USDG pool with enough liquidity; no Vault for ${ticker}`);
       continue;
     }
+    // A Vault's swaps may lose at most 1% against Chainlink, so a pool whose fee alone is near that can never be used.
+    if (Number(pool.fee) > config.launch.poolMaxFee) {
+      warn(`${ticker}: its pool charges ${Number(pool.fee) / 10_000}% a swap; no Vault for ${ticker}`);
+      continue;
+    }
+    usable++;
     // Snapshot from the last probe-pools run (launch.sh runs it right before this).
     const dev = Math.abs(Number(pool.offBps ?? NaN));
     const devMsg = Number.isFinite(dev) ? `pool ${dev}bps from Chainlink at ${p.updatedAt}` : "pool deviation unknown";
     if (!fresh) warn(`${ticker}: price ${age}s old (market closed?). Deposits stay closed until it updates. ${devMsg}`);
-    else if (Number.isFinite(dev) && dev > MAX_POOL_DEVIATION_BPS) fail(`${ticker}: ${devMsg}, over the ${MAX_POOL_DEVIATION_BPS}bps limit`);
+    else if (Number.isFinite(dev) && dev > MAX_POOL_DEVIATION_BPS) warn(`${ticker}: ${devMsg}, over the ${MAX_POOL_DEVIATION_BPS}bps limit, so its deposits wait until the pool comes back`);
     else ok(`${ticker}: price fresh, ${devMsg}, fee ${pool.fee}/${pool.tickSpacing}`);
   }
 
+  if (!usable) fail("no launch Vault has a usable pool right now");
   console.log(failed ? `\n${failed} check(s) failed. Fix them before deploying.` : "\nAll checks passed.");
   process.exit(failed ? 1 : 0);
 }

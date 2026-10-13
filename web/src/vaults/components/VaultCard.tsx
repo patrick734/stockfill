@@ -17,10 +17,13 @@ export function capFill(held: bigint | undefined, cap: bigint | undefined) {
   return Number((held * 10_000n) / cap) / 100;
 }
 
-export function VaultStatus({ vault, paused, priceFresh }: { vault?: Address; paused?: boolean; priceFresh?: boolean }) {
+export function VaultStatus({ vault, paused, priceFresh, priceUsable, cap }: { vault?: Address; paused?: boolean; priceFresh?: boolean; priceUsable?: boolean; cap?: bigint }) {
   if (!vault) return <Pill tone="muted">Launching soon</Pill>;
+  // Deposits open in the same 48h timelock batch that hands the protocol to the timelock.
+  if (cap === 0n) return <Pill tone="muted">Opens soon</Pill>;
   if (paused) return <Pill tone="warn">Paused</Pill>;
   if (priceFresh === false) return <Pill tone="warn">Market closed</Pill>;
+  if (priceUsable === false) return <Pill tone="warn">Pool off price</Pill>;
   return <Pill tone="ok">Open</Pill>;
 }
 
@@ -33,7 +36,9 @@ export function VaultRow({ ticker, name, vault, compact }: { ticker: string; nam
   const href = routes.vault(ticker);
   const capNote = !vault
     ? `$${catalog.heldValueCapUsdg.toLocaleString("en-US")} at launch`
-    : !s.cap
+    : s.cap === 0n
+      ? "opens after the 48h handoff"
+      : !s.cap
       ? undefined
       : fill !== undefined && fill >= 0.5
         ? `${fill.toFixed(0)}% of ${fmtUsdg(s.cap, 0)}`
@@ -61,7 +66,7 @@ export function VaultRow({ ticker, name, vault, compact }: { ticker: string; nam
       {!compact && <td className="num hide-m vx-dim">{capNote ?? DASH}</td>}
       <td className="num hide-m">{vault && y.data ? fmtRate(y.data) : DASH}</td>
       <td className="hide-m">
-        <VaultStatus vault={vault} paused={s.paused} priceFresh={s.priceFresh} />
+        <VaultStatus vault={vault} paused={s.paused} priceFresh={s.priceFresh} priceUsable={s.priceUsable} cap={s.cap} />
       </td>
       <td className="num action">
         <span className="trade-pill">{vault ? "Deposit" : "View"}</span>

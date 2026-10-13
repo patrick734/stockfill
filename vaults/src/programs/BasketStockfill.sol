@@ -23,6 +23,8 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
     bytes32 public constant KEEPER_ROLE = keccak256("KEEPER_ROLE");
 
     uint256 public constant MAX_VAULTS = 8;
+    uint256 public constant DEALLOCATION_INTERVAL = 30 minutes;
+    uint256 public constant DUST_SHARES = 1e12; // one Vault share
     uint256 private constant BPS = 10_000;
 
     VaultStockfill[] private _vaults;
@@ -30,6 +32,7 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
 
     uint256 public heldValueCap;
     uint16 public maxAllocationBps = 4_000;
+    uint256 public lastDeallocation;
 
     event VaultListed(address indexed vault);
     event VaultDelisted(address indexed vault);
@@ -43,6 +46,7 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
     error NotListed();
     error OverAllocated();
     error StillHeld();
+    error TooSoon();
 
     constructor(IERC20 usdg, address admin, address guardian, address keeper, string memory name_, string memory symbol_)
         ERC20(name_, symbol_)
@@ -60,9 +64,12 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
         return _vaults;
     }
 
-    function allPricesFresh() public view returns (bool) {
+    /// @notice False while any Vault the Basket holds has a stale Chainlink price or trades more than its deviation
+    ///         limit away from it. USDG deposits and exits wait then, exactly as they do on the Vaults themselves, so
+    ///         nobody can enter or leave at a price the market has already moved away from. Exits in kind never wait.
+    function pricesUsable() public view returns (bool) {
         for (uint256 i; i < _vaults.length; ++i) {
-            if (_vaults[i].balanceOf(address(this)) != 0 && !_vaults[i].priceFresh()) return false;
+            if (_vaults[i].balanceOf(address(this)) != 0 && !_vaults[i].priceUsable()) return false;
         }
         return true;
     }
@@ -76,7 +83,7 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
     }
 
     function maxDeposit(address) public view override returns (uint256) {
-        if (paused() || !allPricesFresh()) return 0;
+        if (paused() || !pricesUsable()) return 0;
         uint256 held = totalAssets();
         return heldValueCap > held ? heldValueCap - held : 0;
     }
@@ -87,12 +94,12 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
     }
 
     function maxWithdraw(address owner) public view override returns (uint256) {
-        if (!allPricesFresh()) return 0;
+        if (!pricesUsable()) return 0;
         return Math.min(super.maxWithdraw(owner), IERC20(asset()).balanceOf(address(this)));
     }
 
     function maxRedeem(address owner) public view override returns (uint256) {
-        if (!allPricesFresh()) return 0;
+        if (!pricesUsable()) return 0;
         return Math.min(
             super.maxRedeem(owner),
             _convertToShares(IERC20(asset()).balanceOf(address(this)), Math.Rounding.Floor)
@@ -153,6 +160,10 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
 
     function deallocate(VaultStockfill vault, uint256 shares) external onlyRole(KEEPER_ROLE) nonReentrant {
         if (!isListed[address(vault)]) revert NotListed();
+        // At most one USDG exit from the Vaults per interval, which bounds how fast a misbehaving keeper can churn the
+        // Basket through the Vaults' swap costs.
+        if (block.timestamp < lastDeallocation + DEALLOCATION_INTERVAL) revert TooSoon();
+        lastDeallocation = block.timestamp;
         uint256 assets = vault.redeem(shares, address(this), address(this));
         emit Deallocated(address(vault), shares, assets);
     }
@@ -170,7 +181,8 @@ contract BasketStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
 
     function delistVault(VaultStockfill vault) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (!isListed[address(vault)]) revert NotListed();
-        if (vault.balanceOf(address(this)) != 0) revert StillHeld();
+        // Dust (worth about a dollar at most) does not block a delisting, so a tiny donation cannot hold it up.
+        if (vault.balanceOf(address(this)) > DUST_SHARES) revert StillHeld();
         isListed[address(vault)] = false;
         for (uint256 i; i < _vaults.length; ++i) {
             if (_vaults[i] == vault) {

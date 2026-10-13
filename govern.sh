@@ -6,7 +6,7 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 . "$ROOT/tools/env.sh"
 load_launch_env "$ROOT/launch.env"
-export DEPLOYER_ACCOUNT="${DEPLOYER_ACCOUNT:-stockfill-dev}"
+export DEPLOYER_ACCOUNT="${DEPLOYER_ACCOUNT:-stockfill-v4-dev}"
 [ -n "${ROBINHOOD_RPC_URL:-}" ] && export ROBINHOOD_RPC_URL
 case "${1:-}" in
   handoff) S=scripts/handoff.js ;;

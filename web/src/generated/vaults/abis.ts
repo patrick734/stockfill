@@ -1369,6 +1369,19 @@ export const vaultAbi = [
   },
   {
     "inputs": [],
+    "name": "priceUsable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "protocolShareBps",
     "outputs": [
       {
@@ -4078,6 +4091,11 @@ export const basketProgramAbi = [
     "type": "error"
   },
   {
+    "inputs": [],
+    "name": "TooSoon",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -4431,12 +4449,38 @@ export const basketProgramAbi = [
   },
   {
     "inputs": [],
+    "name": "DEALLOCATION_INTERVAL",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "DUST_SHARES",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -4476,19 +4520,6 @@ export const basketProgramAbi = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "allPricesFresh",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -4792,6 +4823,19 @@ export const basketProgramAbi = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "lastDeallocation",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "contract VaultStockfill",
@@ -5034,6 +5078,19 @@ export const basketProgramAbi = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pricesUsable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

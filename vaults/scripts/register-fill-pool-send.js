@@ -17,7 +17,7 @@ async function main() {
   const label = network.name === "hardhat" ? "fork" : network.name;
   const d = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "deployments", `${label}.json`), "utf8"));
   const [signer] = await ethers.getSigners();
-  if (!signer) throw new Error("No dev wallet signer: keystore ~/.foundry/keystores/stockfill-dev (or DEPLOYER_ACCOUNT) not found.");
+  if (!signer) throw new Error("No dev wallet signer: keystore ~/.foundry/keystores/stockfill-v4-dev (or DEPLOYER_ACCOUNT) not found.");
   const p = await plan(ethers.provider, d);
   console.log(`$FILL ${p.fillToken}, Pons pool ${p.id}: ${p.status}`);
   if (["not-initialized", "no-liquidity", "hook-not-allowed"].includes(p.status)) throw new Error(`Not ready: ${p.status}. Run again after $FILL graduates.`);

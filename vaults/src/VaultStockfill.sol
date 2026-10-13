@@ -303,11 +303,27 @@ contract VaultStockfill is ERC4626, AccessControl, Pausable, ReentrancyGuard {
         emit FeesHarvested(fe, fu, pe, pu);
     }
 
+    /// @notice True while Chainlink's price is fresh and the pool trades within maxPoolDeviationBps of it: the
+    ///         conditions under which this Vault takes deposits and pays out USDG.
+    function priceUsable() public view returns (bool) {
+        if (!priceFresh()) return false;
+        (uint256 spot, uint256 fair) = _spotAndFair();
+        return _within(spot, fair);
+    }
+
     function _checkPool() private view {
-        uint256 fair = oracle.usdgValue(address(equityToken), equityUnit);
-        uint256 spot = position.spotUsdgValue(equityUnit);
+        (uint256 spot, uint256 fair) = _spotAndFair();
+        if (!_within(spot, fair)) revert PoolDeviation(spot, fair);
+    }
+
+    function _spotAndFair() private view returns (uint256 spot, uint256 fair) {
+        fair = oracle.usdgValue(address(equityToken), equityUnit);
+        spot = position.spotUsdgValue(equityUnit);
+    }
+
+    function _within(uint256 spot, uint256 fair) private view returns (bool) {
         uint256 diff = spot > fair ? spot - fair : fair - spot;
-        if (diff * BPS > fair * maxPoolDeviationBps) revert PoolDeviation(spot, fair);
+        return diff * BPS <= fair * maxPoolDeviationBps;
     }
 
     function _swapChecked(IERC20 tokenIn, IERC20 tokenOut, uint256 amountIn, bytes memory route)

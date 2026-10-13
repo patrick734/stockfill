@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
+const { loadFixture, time } = require("@nomicfoundation/hardhat-network-helpers");
 const { USDG, baseFixture, deployVault } = require("./fixtures");
 
 describe("BasketStockfill", function () {
@@ -54,5 +54,58 @@ describe("BasketStockfill", function () {
     await ctx.basket.connect(ctx.alice).redeemInKind(half, ctx.bob.address, ctx.alice.address);
     expect(await ctx.usdg.balanceOf(ctx.bob)).to.be.closeTo(USDG(1_000_000 + 3_000), 2n);
     expect(await ctx.amd.vault.convertToAssets(await ctx.amd.vault.balanceOf(ctx.bob))).to.be.closeTo(USDG(2_000), 2n);
+  });
+  it("refuses USDG deposits and exits while a held Vault trades off Chainlink, like the Vaults do", async function () {
+    const ctx = await loadFixture(basketFixture);
+    const b = ctx.basket;
+    await b.connect(ctx.admin).setHeldValueCap(USDG(100_000));
+    await ctx.usdg.connect(ctx.alice).approve(b, USDG(5_000));
+    await b.connect(ctx.alice).deposit(USDG(5_000), ctx.alice.address);
+    await b.connect(ctx.keeper).allocate(ctx.amd.vault, USDG(2_000));
+    expect(await b.pricesUsable()).to.equal(true);
+    // The AMD pool drops 20% below Chainlink while the feed still reads fresh.
+    await ctx.amd.position.setSpot(USDG(120));
+    expect(await ctx.amd.vault.priceUsable()).to.equal(false);
+    expect(await b.pricesUsable()).to.equal(false);
+    expect(await b.maxDeposit(ctx.bob)).to.equal(0n);
+    expect(await b.maxWithdraw(ctx.alice)).to.equal(0n);
+    await ctx.usdg.connect(ctx.bob).approve(b, USDG(1_000));
+    await expect(b.connect(ctx.bob).deposit(USDG(1_000), ctx.bob.address)).to.be.reverted;
+    await expect(b.connect(ctx.alice).withdraw(USDG(100), ctx.alice.address, ctx.alice.address)).to.be.reverted;
+    // Leaving in kind needs no price.
+    await b.connect(ctx.alice).redeemInKind(await b.balanceOf(ctx.alice), ctx.alice.address, ctx.alice.address);
+    // Back within 2%: open again.
+    await ctx.amd.position.setSpot(USDG(152));
+    expect(await b.pricesUsable()).to.equal(true);
+  });
+
+  it("allows one USDG withdrawal from the Vaults per interval", async function () {
+    const ctx = await loadFixture(basketFixture);
+    const b = ctx.basket;
+    await b.connect(ctx.admin).setHeldValueCap(USDG(100_000));
+    await ctx.usdg.connect(ctx.alice).approve(b, USDG(5_000));
+    await b.connect(ctx.alice).deposit(USDG(5_000), ctx.alice.address);
+    await b.connect(ctx.keeper).allocate(ctx.amd.vault, USDG(2_000));
+    await b.connect(ctx.keeper).allocate(ctx.tsla.vault, USDG(2_000));
+    const half = (await ctx.amd.vault.balanceOf(b)) / 2n;
+    await b.connect(ctx.keeper).deallocate(ctx.amd.vault, half);
+    await expect(b.connect(ctx.keeper).deallocate(ctx.tsla.vault, half)).to.be.revertedWithCustomError(b, "TooSoon");
+    await time.increase(30 * 60);
+    await b.connect(ctx.keeper).deallocate(ctx.tsla.vault, half);
+  });
+
+  it("delists a Vault despite a dust donation, but not one it really holds", async function () {
+    const ctx = await loadFixture(basketFixture);
+    const b = ctx.basket;
+    await b.connect(ctx.admin).setHeldValueCap(USDG(100_000));
+    await ctx.usdg.connect(ctx.alice).approve(b, USDG(5_000));
+    await b.connect(ctx.alice).deposit(USDG(5_000), ctx.alice.address);
+    await b.connect(ctx.keeper).allocate(ctx.amd.vault, USDG(1_000));
+    await expect(b.connect(ctx.admin).delistVault(ctx.amd.vault)).to.be.revertedWithCustomError(b, "StillHeld");
+    await ctx.usdg.connect(ctx.alice).approve(ctx.tsla.vault, USDG(10));
+    await ctx.tsla.vault.connect(ctx.alice).deposit(USDG(10), ctx.alice.address);
+    await ctx.tsla.vault.connect(ctx.alice).transfer(b, 10n ** 9n);
+    await b.connect(ctx.admin).delistVault(ctx.tsla.vault);
+    expect(await b.isListed(ctx.tsla.vault)).to.equal(false);
   });
 });

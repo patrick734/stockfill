@@ -30,6 +30,7 @@ export function useVaultStats(vault: Address | undefined) {
       { ...w, functionName: "holdings" },
       { ...w, functionName: "equityToken" },
       { ...w, functionName: "oracle" },
+      { ...w, functionName: "priceUsable" },
     ],
   });
   const r = <T,>(i: number) => (data?.[i]?.status === "success" ? (data[i].result as T) : undefined);
@@ -47,6 +48,8 @@ export function useVaultStats(vault: Address | undefined) {
     usdgHeld: holdings?.[1],
     equityToken: r<Address>(8),
     oracle: r<Address>(9),
+    // Fresh price and the pool within 2% of Chainlink: deposits and USDG exits are open.
+    priceUsable: r<boolean>(10),
   };
 }
 

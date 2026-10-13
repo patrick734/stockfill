@@ -14,6 +14,7 @@ const FILES = {
   FeeRouter: "src/FeeRouterStockfill.sol/FeeRouterStockfill.json",
   BuyBurn: "src/BuyBurnStockfill.sol/BuyBurnStockfill.json",
   BorrowDesk: "src/BorrowDeskStockfill.sol/BorrowDeskStockfill.json",
+  Basket: "src/programs/BasketStockfill.sol/BasketStockfill.json",
   VaultPositionV4: "src/v4/PositionStockfill.sol/PositionStockfill.json",
   V4SwapAdapter: "src/v4/SwapAdapterStockfill.sol/SwapAdapterStockfill.json",
 };

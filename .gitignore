@@ -16,3 +16,9 @@ verify-files
 vaults/artifacts
 vaults/cache
 docs/LAUNCH.md
+vaults/deployments/keeper.json
+vaults/deployments/localhost.json
+vaults/deployments/fork.json
+vaults/deployments/hardhat.json
+vaults/deployments/*.progress.json
+keeper/.state/

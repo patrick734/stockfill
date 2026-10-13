@@ -4,19 +4,22 @@ A small Node.js bot (ethers v6, CommonJS) that runs the vault protocol's routine
 
 | # | Duty | Contract call | Who may call |
 |---|------|---------------|--------------|
+| 0 | Basket: keep about 20% in USDG, spread the rest across the Vaults (at most 40% in one) | `Basket.allocate(vault, assets)`, `Basket.deallocate(vault, shares)` | `KEEPER_ROLE` |
 | 1 | Keep each Vault's range around the Chainlink price | `Vault.rebalance(tickLower, tickUpper, sellUsdg, swapAmount, route)` | `KEEPER_ROLE` |
 | 2 | Collect swap fees | `Vault.harvest()` | anyone |
 | 3 | Claim Credit Line reserves | `BorrowDesk.claimReserves()` | anyone |
 | 4 | Forward the protocol share | `FeeRouter.routeMany(tokens)` | anyone |
 | 5 | Buy and burn $FILL | `BuyBurn.drawdown(tokenIn, amountIn, minFillOut, route)` | `KEEPER_ROLE` |
 
-Contract names are shortened here: `Vault` is VaultStockfill, `BorrowDesk` is BorrowDeskStockfill, `FeeRouter` is
+Contract names are shortened here: `Basket` is BasketStockfill, `Vault` is VaultStockfill, `BorrowDesk` is BorrowDeskStockfill, `FeeRouter` is
 FeeRouterStockfill, `BuyBurn` is BuyBurnStockfill, `VaultOracle` is OracleStockfill, `VaultPositionV4` is
 PositionStockfill and `V4SwapAdapter` is SwapAdapterStockfill.
 
 Every call is simulated first (`staticCall` from the keeper address). A reverting simulation is logged and skipped, so one failing Vault or token never stops the rest of the cycle.
 
-The keeper does **not** liquidate borrowers and does **not** run BasketProgram `allocate`/`deallocate` (see [Not automated](#not-automated)).
+The keeper does **not** liquidate borrowers (see [Not automated](#not-automated)). Basket settings live in `config.json`
+under `basket`: `idlePct` (the USDG share kept for withdrawals, default 20) and `minMoveUsdg` (the smallest move worth a
+transaction). The Basket itself allows at most one `deallocate` every 30 minutes.
 
 ## Setup
 
@@ -160,7 +163,6 @@ Checks the router's balance of USDG and of every Vault's Equity Token and calls 
 ## Not automated
 
 - **Liquidations.** The keeper only reports unhealthy accounts (`borrowDesk.logUnhealthy`). Liquidating needs USDG inventory and a plan for the seized Vault shares; do it manually (`BorrowDesk.liquidate`).
-- **BasketProgram `allocate` / `deallocate`.** How much of the Basket goes into which Vault is a governance decision, not a routine duty. A duty can be added here once there is a policy (target weights, rebalance bands) to encode.
 - **Timelock and governance actions** (input limits, risk limits, unpausing). The keeper warns when it sees one is needed (for example `maxInputPerRun` is 0 for a held token).
 
 ## Testing

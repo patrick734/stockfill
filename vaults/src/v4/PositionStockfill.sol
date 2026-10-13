@@ -181,7 +181,9 @@ contract PositionStockfill is IVaultPosition {
     }
 
     function collectFees() external onlyVault returns (uint256 equityFees, uint256 usdgFees) {
-        if (tokenId == 0) return (0, 0);
+        // A range emptied by withdrawals has nothing to collect (removing liquidity already collected its fees), and
+        // Uniswap v4 refuses to touch an empty position, so it must be skipped rather than poked.
+        if (tokenId == 0 || liquidity() == 0) return (0, 0);
         _decrease(0);
         return _sendToVault();
     }

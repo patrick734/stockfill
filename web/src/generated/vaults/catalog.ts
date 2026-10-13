@@ -78,14 +78,17 @@ export const catalog = {
     }
   },
   "launchVaults": [
-    "TSLA",
     "NVDA",
+    "TSLA",
     "AAPL",
-    "PLTR",
-    "META"
+    "META",
+    "GOOGL",
+    "MSFT",
+    "SPY"
   ],
   "launchCreditLines": [
-    "META"
+    "META",
+    "NVDA"
   ],
   "heldValueCapUsdg": 25000
 } as const;

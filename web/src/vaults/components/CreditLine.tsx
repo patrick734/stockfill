@@ -247,8 +247,8 @@ export function CreditLine({ ticker, desk, vault, usdg }: { ticker: string; desk
             </>
           )}
           <p className="small muted vx-foot">
-            Below 1.00, anyone can repay part of your debt and take pledged shares at a discount. Prices pause outside market
-            hours and can gap at the open.
+            Below 1.00, anyone can repay part of your debt and take pledged shares at a discount. Prices go stale when markets
+            close and can gap when trading resumes.
           </p>
         </div>
 

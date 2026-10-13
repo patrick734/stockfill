@@ -92,13 +92,14 @@ async function main() {
   const [ticker, deskAddr] = Object.entries(dep.creditLines)[0];
   const desk = new ethers.Contract(deskAddr, abis.BorrowDesk, demoUser);
   const vault = new ethers.Contract(dep.vaults[ticker].vault, [...abis.Vault], demoUser);
-  const shares = (await vault.balanceOf(dep.demoUser)) / 5n;
+  // The demo deploy already pledged 25% of the Vault on this line; a line holds at most 30%, so pledge 4% more.
+  const shares = ((await vault.totalSupply()) * 4n) / 100n;
   await (await vault.approve(deskAddr, shares)).wait();
   await (await desk.pledge(shares)).wait();
-  await (await desk.borrow(ethers.parseUnits("300", 6), dep.demoUser)).wait();
+  await (await desk.borrow((await desk.borrowable(dep.demoUser)) * 99n / 100n, dep.demoUser)).wait();
   await provider.send("evm_increaseTime", [30 * 86400]);
   await provider.send("evm_mine", []);
-  console.log(`  demo user borrowed 300 USDG on the ${ticker} Credit Line; advanced 30 days`);
+  console.log(`  demo user borrowed close to the limit on the ${ticker} Credit Line; advanced 30 days`);
   // Mock feeds keep their original updatedAt, so refresh every price after the time jump.
   const oracle = new ethers.Contract(dep.oracle, abis.VaultOracle, provider);
   for (const w of Object.values(dep.vaults)) {
@@ -109,11 +110,18 @@ async function main() {
   const usdgFeed = new ethers.Contract(await oracle.usdgFeed(), MOCK_FEED, anyone);
   await (await usdgFeed.setAnswer(await usdgFeed.answer())).wait();
 
+  // 4. A fresh Basket deposit, all idle: the live keeper run should put most of it to work.
+  const basket = new ethers.Contract(dep.basketProgram, abis.Basket, demoUser);
+  await (await new ethers.Contract(dep.usdg, ERC20_RW, demoUser).approve(dep.basketProgram, ethers.parseUnits("8000", 6))).wait();
+  await (await basket.deposit(ethers.parseUnits("8000", 6), dep.demoUser)).wait();
+  const basketIdleBefore = await bal(dep.usdg, dep.basketProgram);
+
   // ---------------------------------------------------------------- dry run: nothing may change
   const snapshot = async () => ({
     router: await Promise.all(tokens.map((t) => bal(t, dep.feeRouter))),
     retired: await dd.totalRetired(),
     reserves: await desk.reserves(),
+    basketIdle: await bal(dep.usdg, dep.basketProgram),
     pendingUsdg: await Promise.all(Object.values(dep.vaults).map((w) => new ethers.Contract(w.position, MOCK_POSITION, provider).pendingUsdgFees())),
   });
   const before = await snapshot();
@@ -132,6 +140,8 @@ async function main() {
   console.log("\nLive-run checks");
   check(after.pendingUsdg.every((x) => x === 0n), "every Vault harvested (no pending fees left)");
   check(after.reserves === 0n, "BorrowDesk reserves claimed");
+  const basketTotal = await basket.totalAssets();
+  check(after.basketIdle < basketIdleBefore && after.basketIdle * 10n < basketTotal * 3n, `Basket idle USDG put to work (${ethers.formatUnits(basketIdleBefore, 6)} -> ${ethers.formatUnits(after.basketIdle, 6)})`);
   check(after.router.every((x) => x === 0n), "FeeRouter emptied into BuyBurn");
   check(after.retired > before.retired, `drawdown retired $FILL (${ethers.formatEther(after.retired - before.retired)})`);
   check((liveOut.match(/drawdown: confirmed/g) || []).length === 1, "exactly one drawdown (shared minInterval)");

@@ -176,7 +176,7 @@ export function YourHoldings() {
           <Link href={routes.vaults} className="vx-holding">
             <span className="tk-dot">B</span>
             <span>
-              <b>Basket Program</b>
+              <b>Basket</b>
               <span className="small muted">sfBASKET</span>
             </span>
             <span className="vx-holding-v">{fmtUsdg(basketValue)}</span>

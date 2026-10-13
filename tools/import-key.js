@@ -1,7 +1,7 @@
 // Imports a wallet you created yourself (in MetaMask, for example) into an encrypted Foundry keystore, reading the
 // key from the clipboard (macOS). The key is never shown or typed, and the clipboard is cleared right after.
 //   node tools/import-key.js [name]
-// The default name is stockfill-dev.
+// The default name is stockfill-v4-dev.
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -10,10 +10,10 @@ const readline = require("readline");
 const { execSync } = require("child_process");
 const { Wallet } = require(require.resolve("ethers", { paths: [path.join(__dirname, "..", "vaults")] }));
 
-const name = process.argv[2] || "stockfill-dev";
+const name = process.argv[2] || "stockfill-v4-dev";
 const dir = path.join(os.homedir(), ".foundry", "keystores");
 const file = path.join(dir, name);
-const pwFile = process.env.DEPLOYER_PASSWORD_FILE || path.join(os.homedir(), ".foundry", "stockfill.pw");
+const pwFile = process.env.DEPLOYER_PASSWORD_FILE || path.join(os.homedir(), ".foundry", "stockfill-v4.pw");
 if (fs.existsSync(file)) { console.error(`${file} already exists; not replacing it.`); process.exit(1); }
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });

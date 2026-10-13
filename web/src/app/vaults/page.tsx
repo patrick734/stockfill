@@ -50,8 +50,8 @@ export default function VaultsPage() {
           </h1>
           <p className="lede">
             Each Vault provides liquidity for one Robinhood Stock Token around Chainlink&apos;s price, collects a fee on every
-            trade through its range and compounds 70% of it for Vault holders. Deposits open while NYSE is open and prices
-            are fresh; redeeming in kind is open any time.
+            trade through its range and compounds 70% of it for Vault holders. Deposits open while Chainlink&apos;s price is
+            fresh and the pool trades within 2% of it; redeeming in kind is open any time.
           </p>
           <HomeStats />
         </div>

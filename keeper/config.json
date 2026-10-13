@@ -40,5 +40,11 @@
     "logUnhealthy": false,
     "scanFromBlock": 0,
     "scanChunkBlocks": 50000
+  },
+
+  "basket": {
+    "enabled": true,
+    "idlePct": 20,
+    "minMoveUsdg": "50"
   }
 }

@@ -115,8 +115,26 @@ contract MockPosition is IVaultPosition {
     }
 
     uint256 public entries;
+    // Range views the website reads, so the local demo shows its ranges. The mock "pool" sits mid-range.
+    int24 public tickLower;
+    int24 public tickUpper;
 
-    function enter(int24, int24) external onlyVault returns (uint128) {
+    function liquidity() external view returns (uint128) {
+        (uint256 e, uint256 u) = balances();
+        return entries > 0 && (e > 0 || u > 0) ? 1 : 0;
+    }
+
+    function slot0() external view returns (uint160, int24) {
+        return (0, int24((int256(tickLower) + int256(tickUpper)) / 2));
+    }
+
+    function equityIsToken0() external pure returns (bool) {
+        return true;
+    }
+
+    function enter(int24 lower, int24 upper) external onlyVault returns (uint128) {
+        tickLower = lower;
+        tickUpper = upper;
         ++entries;
         return 1;
     }

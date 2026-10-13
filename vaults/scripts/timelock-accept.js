@@ -1,5 +1,6 @@
-// Prints the two timelock transactions that finish the ownership handoff after a live deploy: schedule
-// acceptOwnership() on the oracle, registry and swap adapter now, execute it once the delay has passed.
+// Prints the two timelock transactions that finish the handoff after a live deploy: schedule, now, one batch that
+// accepts ownership of the oracle, registry and swap adapter and opens the deposit caps of every Vault and the Basket;
+// execute it once the delay has passed.
 // Also reports where the handoff stands. Read-only; sends nothing. scripts/handoff.js sends them.
 //   node scripts/timelock-accept.js [deployments/robinhood.json]
 const fs = require("fs");
@@ -19,22 +20,26 @@ const TIMELOCK_ABI = [
   "function getTimestamp(bytes32) view returns (uint256)",
 ];
 const OWNABLE_ABI = ["function owner() view returns (address)", "function pendingOwner() view returns (address)", "function acceptOwnership()"];
+const CAP_ABI = ["function setHeldValueCap(uint256 cap)", "function heldValueCap() view returns (uint256)"];
 
 // Builds the schedule/execute transactions for deployment `d` and reads where the handoff stands.
 async function handoff(provider, d) {
-  const targets = d.pendingTimelockAcceptances || [];
-  if (!targets.length) throw new Error("The deployment lists no pending timelock acceptances.");
+  const owned = d.pendingTimelockAcceptances || [];
+  if (!owned.length) throw new Error("The deployment lists no pending timelock acceptances.");
+  const caps = d.openCaps || [];
   const timelock = new ethers.Contract(d.timelock, TIMELOCK_ABI, provider);
   const ownable = new ethers.Interface(OWNABLE_ABI);
-  const payloads = targets.map(() => ownable.encodeFunctionData("acceptOwnership"));
+  const capIface = new ethers.Interface(CAP_ABI);
+  const targets = [...owned, ...caps.map((c) => c.target)];
+  const payloads = [...owned.map(() => ownable.encodeFunctionData("acceptOwnership")), ...caps.map((c) => capIface.encodeFunctionData("setHeldValueCap", [BigInt(c.cap)]))];
   const values = targets.map(() => 0n);
   const predecessor = ethers.ZeroHash;
-  const salt = ethers.id("stockfill-accept-ownership");
+  const salt = ethers.id("stockfill-handoff-and-open");
   const delay = await timelock.getMinDelay();
   const id = await timelock.hashOperationBatch(targets, values, payloads, predecessor, salt);
 
   const owners = [];
-  for (const t of targets) {
+  for (const t of owned) {
     const c = new ethers.Contract(t, OWNABLE_ABI, provider);
     const [owner, pending] = await Promise.all([c.owner(), c.pendingOwner()]);
     owners.push({ target: t, owner, pending });

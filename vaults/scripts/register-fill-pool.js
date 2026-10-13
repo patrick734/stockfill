@@ -87,7 +87,7 @@ async function main() {
     console.log(`\nThe adapter is still owned by ${p.owner} (handoff not executed yet). Send this from that wallet:`);
     console.log(JSON.stringify(p.tx, null, 2));
     return console.log(
-      `\nFrom the deployer keystore with Foundry:\n  cast send ${p.tx.to} ${p.tx.data} --keystore ~/.foundry/keystores/stockfill-dev --password-file ~/.foundry/stockfill.pw --rpc-url ${RPC.includes("@") || /alchemy|infura|quiknode/.test(RPC) ? "<your RPC>" : RPC}`,
+      `\nFrom the deployer keystore with Foundry:\n  cast send ${p.tx.to} ${p.tx.data} --keystore ~/.foundry/keystores/stockfill-v4-dev --password-file ~/.foundry/stockfill-v4.pw --rpc-url ${RPC.includes("@") || /alchemy|infura|quiknode/.test(RPC) ? "<your RPC>" : RPC}`,
     );
   }
   console.log("\nStep 1, schedule (dev wallet, now). ./govern.sh register-pool sends it:");

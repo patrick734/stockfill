@@ -49,10 +49,14 @@ export function VaultDetail({ ticker }: { ticker: string }) {
             {ticker} <em>Vault</em>
           </h1>
           {vault &&
-            (s.paused ? (
+            (s.cap === 0n ? (
+              <Pill tone="muted">Opens after the 48h timelock handoff</Pill>
+            ) : s.paused ? (
               <Pill tone="warn">Depositing paused</Pill>
             ) : s.priceFresh === false ? (
               <Pill tone="warn">Market closed · exits in kind only</Pill>
+            ) : s.priceUsable === false ? (
+              <Pill tone="warn">Pool off Chainlink · exits in kind only</Pill>
             ) : s.priceFresh ? (
               <Pill tone="ok">Open · price fresh</Pill>
             ) : null)}
@@ -233,13 +237,17 @@ function DepositPanel({ vault, usdg, ticker, stats }: { vault: Address; usdg: Ad
 
   const disabledReason = !acct.address
     ? null
-    : tab === "Deposit" && stats.paused
+    : tab === "Deposit" && stats.cap === 0n
+      ? "Deposits open after the 48h timelock handoff"
+      : tab === "Deposit" && stats.paused
       ? "Depositing is paused"
       : tab !== "Redeem in kind" && stats.priceFresh === false
         ? "Price feed closed: use Redeem in kind"
-        : over
-          ? "Amount exceeds available"
-          : null;
+        : tab !== "Redeem in kind" && stats.priceUsable === false
+          ? "Pool is more than 2% off Chainlink: use Redeem in kind"
+          : over
+            ? "Amount exceeds available"
+            : null;
 
   return (
     <div className="vx-panel">
@@ -287,7 +295,7 @@ function DepositPanel({ vault, usdg, ticker, stats }: { vault: Address; usdg: Ad
         </button>
       )}
       <TxStatus message={tx.busy ? undefined : tx.message} error={tx.error} hash={tx.busy ? undefined : tx.hash} />
-      {tab === "Deposit" && <p className="small muted vx-foot">Withdraw in USDG any time the price is fresh. Redeem in kind works even when markets are closed.</p>}
+      {tab === "Deposit" && <p className="small muted vx-foot">Withdraw in USDG while the price is fresh and the pool trades near it. Redeem in kind works any time, even when markets are closed.</p>}
     </div>
   );
 }

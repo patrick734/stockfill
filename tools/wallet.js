@@ -1,6 +1,6 @@
 // Wallet helpers for launch. Private keys are generated, encrypted and used in memory only; nothing here prints one.
 //
-//   node tools/wallet.js create <name>          new keystore ~/.foundry/keystores/<name>, password in ~/.foundry/stockfill.pw
+//   node tools/wallet.js create <name>          new keystore ~/.foundry/keystores/<name>, password in ~/.foundry/stockfill-v4.pw
 //   node tools/wallet.js address <name>         prints the address of a keystore
 //   node tools/wallet.js keeper-secret <owner/repo>  new keeper wallet; the key goes straight into the GitHub
 //                                                    secret KEEPER_PRIVATE_KEY via the gh CLI; prints the address only
@@ -11,7 +11,7 @@ const crypto = require("crypto");
 const { Wallet } = require(require.resolve("ethers", { paths: [path.join(__dirname, "..", "vaults")] }));
 
 const dir = path.join(os.homedir(), ".foundry", "keystores");
-const pwFile = process.env.DEPLOYER_PASSWORD_FILE || path.join(os.homedir(), ".foundry", "stockfill.pw");
+const pwFile = process.env.DEPLOYER_PASSWORD_FILE || path.join(os.homedir(), ".foundry", "stockfill-v4.pw");
 const [cmd, name] = process.argv.slice(2);
 
 function password(create = false) {
